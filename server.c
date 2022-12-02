@@ -15,15 +15,16 @@ typedef struct sockaddr SA;
 
 int main(int argc, char **argv)
 {
-    int listenfd, connfd;
+    int listenfd, connfd, n;
     struct sockaddr_in servaddr, clientaddr;
     char buff[MAXLINE];
+    char recvline[MAXLINE + 1];
     time_t ticks;
     socklen_t len;
     int port;
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
-    printf("The Value of listenfd is: %d\n",listenfd);
+    printf("The Value of listenfd is: %d\n", listenfd);
     port = atoi(argv[1]);
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
@@ -31,7 +32,7 @@ int main(int argc, char **argv)
     servaddr.sin_port = htons(port); /* day time server*/
 
     bind(listenfd, (SA *)&servaddr, sizeof(servaddr));
-    printf("Server is waiting connection at port %d\n",port);
+    printf("Server is waiting connection at port %d\n", port);
     listen(listenfd, LISTENQ);
 
     for (;;)
@@ -44,6 +45,19 @@ int main(int argc, char **argv)
         ticks = time(NULL);
         snprintf(buff, sizeof(buff), "%.24s\r\n", ctime(&ticks));
         write(connfd, buff, strlen(buff));
+        if (n = read(connfd, recvline, MAXLINE))
+        {
+            recvline[n] = 0;
+            printf("Aayush:");
+            if (fputs(recvline, stdout) == EOF)
+                printf("fputs error");
+            snprintf(buff, sizeof(buff), "%.24s\r\n", recvline);
+            printf("Char is %ld",strlen(buff));
+            fflush(stdout);
+
+            write(connfd, buff, strlen(buff));
+        }
+
         close(connfd);
     }
 }

@@ -16,6 +16,7 @@ typedef struct sockaddr SA;
 int main(int argc, char **argv)
 {
     int sockfd, n;
+    char chat[30];
     char recvline[MAXLINE + 1];
     struct sockaddr_in servaddr;
     int port;
@@ -33,13 +34,16 @@ int main(int argc, char **argv)
 
     val=connect(sockfd, (SA *)&servaddr, sizeof(servaddr));
     printf("value= %d",val);
-        
+    // scanf("Aayush: %s",&chat);
+    fgets(chat,30,stdin);
+    printf("Value: %s",chat);
     while ((n = read(sockfd, recvline, MAXLINE)) > 0)
     {
         recvline[n] = 0;
         printf("Server time:");
         if (fputs(recvline, stdout) == EOF)
             printf("fputs error");
+        write(sockfd, chat, strlen(chat));
     }
     if (n < 0)
         printf("read error");
