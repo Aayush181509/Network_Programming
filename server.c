@@ -15,6 +15,7 @@ typedef struct sockaddr SA;
 
 int main(int argc, char **argv)
 {
+    char chat[100];
     int listenfd, connfd, n;
     struct sockaddr_in servaddr, clientaddr;
     char buff[MAXLINE];
@@ -48,16 +49,19 @@ int main(int argc, char **argv)
         if (n = read(connfd, recvline, MAXLINE))
         {
             recvline[n] = 0;
-            printf("Aayush:");
+            printf("Client: ");
             if (fputs(recvline, stdout) == EOF)
                 printf("fputs error");
             snprintf(buff, sizeof(buff), "%.24s\r\n", recvline);
-            printf("Char is %ld",strlen(buff));
+            // printf("Char is %ld", strlen(buff));
             fflush(stdout);
 
             write(connfd, buff, strlen(buff));
         }
-
+        printf("Enter a message for client: ");
+        fgets(chat, 100, stdin);
+        printf("Server: %s", chat);
+        write(connfd,chat,strlen(chat));
         close(connfd);
     }
 }

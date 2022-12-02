@@ -32,17 +32,19 @@ int main(int argc, char **argv)
     if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0)
         printf("inet_pton error for %s", argv[1]);
 
-    val=connect(sockfd, (SA *)&servaddr, sizeof(servaddr));
-    printf("value= %d",val);
+    val = connect(sockfd, (SA *)&servaddr, sizeof(servaddr));
+    // printf("value= %d",val);
     // scanf("Aayush: %s",&chat);
-    fgets(chat,30,stdin);
-    printf("Value: %s",chat);
+
+    // printf("Client: %s",chat);
     while ((n = read(sockfd, recvline, MAXLINE)) > 0)
     {
         recvline[n] = 0;
-        printf("Server time:");
+        printf("Server:");
         if (fputs(recvline, stdout) == EOF)
             printf("fputs error");
+        printf("Client: ");
+        fgets(chat, 30, stdin);
         write(sockfd, chat, strlen(chat));
     }
     if (n < 0)
