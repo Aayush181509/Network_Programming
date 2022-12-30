@@ -1,3 +1,7 @@
 client
 server
 hello
+fork_exec
+byteorder
+wait
+waitpid
